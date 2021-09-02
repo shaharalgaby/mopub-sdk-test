@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VastVideoGradientStripWidget">
+        <attr name="gradientOrientation" format="enum">
+            <enum name="top_bottom" value="0"/>
+            <enum name="tr_bl" value="1"/>
+            <enum name="right_left" value="2"/>
+            <enum name="br_tl" value="3"/>
+            <enum name="bottom_top" value="4"/>
+            <enum name="bl_tr" value="5"/>
+            <enum name="left_right" value="6"/>
+            <enum name="tl_br" value="7"/>
+        </attr>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,16 @@
+// Copyright 2018-2021 Twitter, Inc.
+// Licensed under the MoPub SDK License Agreement
+// https://www.mopub.com/legal/sdk-license-agreement/
+
+apply from: '../shared-build.gradle'
+
+dependencies {
+    implementation 'com.mopub.volley:mopub-volley:2.1.0'
+    api project(':mopub-sdk:mopub-sdk-util')
+}
+
+project.description = 'MoPub Android SDK - Networking'
+project.ext.displayName = 'MoPub Android SDK - Networking'
+project.ext.projectName = 'mopub-sdk-networking'
+project.ext.uploadName = 'mopub-android-sdk-networking'
+apply from: '../publisher.gradle'

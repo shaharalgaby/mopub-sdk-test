@@ -1,0 +1,38 @@
+// Copyright 2018-2021 Twitter, Inc.
+// Licensed under the MoPub SDK License Agreement
+// https://www.mopub.com/legal/sdk-license-agreement/
+
+apply from: 'shared-build.gradle'
+
+dependencies {
+    api project(':mopub-sdk:mopub-sdk-base')
+    api project(':mopub-sdk:mopub-sdk-banner')
+    api project(':mopub-sdk:mopub-sdk-fullscreen')
+    api project(':mopub-sdk:mopub-sdk-native-static')
+    implementation project(':mopub-sdk:mopub-sdk-networking')
+
+    testImplementation 'org.robolectric:shadows-httpclient:4.3'
+    testImplementation 'org.apache.commons:commons-lang3:3.9'
+    testImplementation('com.mopub:omsdk-android:1.3.16@aar')
+
+    ['powermock-api-mockito',
+     'powermock-core',
+     'powermock-module-junit4',
+     'powermock-module-junit4-rule',
+     'powermock-classloading-xstream'].each {
+        testImplementation ("org.powermock:${it}:1.7.4") {
+            exclude group: 'org.mockito', module: 'mockito-core'
+        }
+    }
+}
+
+android {
+    useLibrary 'org.apache.http.legacy'
+}
+
+
+project.description = 'MoPub Android SDK'
+project.ext.displayName = 'MoPub Android SDK'
+project.ext.projectName = 'mopub-sdk'
+project.ext.uploadName = 'mopub-android-sdk'
+apply from: 'publisher.gradle'

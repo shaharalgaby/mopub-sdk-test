@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="close_button_text_color">#ffffff</color>
+
+    <color name="gradient_strip_start_color">#66000000</color>
+    <color name="gradient_strip_end_color">#00000000</color>
+
+</resources>

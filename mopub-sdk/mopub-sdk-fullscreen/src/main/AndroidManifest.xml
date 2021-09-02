@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mopub.mobileads.interstitial">
+
+    <application>
+        <activity
+            android:name="com.mopub.mobileads.MoPubFullscreenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/MoPubFullscreenTheme" />
+    </application>
+</manifest>

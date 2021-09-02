@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mopub.mobileads.VideoCtaButtonWidget
+        android:id="@+id/mopub_fullscreen_video_cta_button"
+        android:layout_width="@dimen/cta_button_width"
+        android:layout_height="@dimen/cta_button_height"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/cta_button_margin" />
+
+</merge>

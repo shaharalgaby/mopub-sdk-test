@@ -1,0 +1,147 @@
+// Copyright 2018-2021 Twitter, Inc.
+// Licensed under the MoPub SDK License Agreement
+// https://www.mopub.com/legal/sdk-license-agreement/
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+repositories {
+    google()
+    mavenCentral()
+    flatDir {
+        dirs project(':mopub-sdk').file('../libs')
+    }
+}
+
+project.group = 'com.mopub'
+project.version = '5.18.0'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjvm-default=enable']
+        jvmTarget = '1.8'
+    }
+
+    compileSdkVersion 30
+    lintOptions { abortOnError false }
+
+    defaultConfig {
+        versionCode 90
+        versionName version
+        minSdkVersion 19
+        targetSdkVersion 30
+        consumerProguardFiles project(':mopub-sdk').file('proguard.txt')
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            resources.srcDirs = ['src/main/resources']
+            aidl.srcDirs = ['src/main']
+            renderscript.srcDirs = ['src/main']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
+
+    testOptions {
+        unitTests {
+            // This causes android platform methods from the test JAR
+            // to return null, false, etc instead of throwing an exception.
+            // We should periodically disable this and tackle the broken tests
+            // as it exposes when we are hitting platform APIs in our tests.
+            // If these tests *require* platform APIs we may want to make them
+            // connected tests instead.
+            returnDefaultValues = true
+
+            def _maxParallelForks = "${System.env.MAX_PARALLEL_FORKS}"
+
+            // Test JVM settings since we have a lot of classes loaded.
+            all {
+                jvmArgs '-XX:MaxPermSize=4096m', '-Xmx8192m', '-noverify'
+                forkEvery 200
+                if (_maxParallelForks
+                        && !_maxParallelForks.allWhitespace
+                        && _maxParallelForks.toString() != "null"
+                        && _maxParallelForks.isInteger()) {
+                    maxParallelForks Integer.parseInt(_maxParallelForks)
+                } else {
+                    maxParallelForks Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+                }
+            }
+
+            includeAndroidResources = true
+        }
+
+        // separate block is necessary for Robolectric properties.
+        unitTests.all {
+            def sdkVersionsToTest = "${System.env.ROBOELECTRIC_TEST_API_VERSIONS}"
+
+            if (sdkVersionsToTest
+                    && !sdkVersionsToTest.allWhitespace
+                    && sdkVersionsToTest.toString() != "null") {
+                systemProperty 'robolectric.enabledSdks', sdkVersionsToTest
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    project(':mopub-sdk').file('proguard.txt')
+        }
+
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    // Note: You will also need a local.properties file to set the location of the SDK in the same
+    // way that the existing SDK requires, using the sdk.dir property.
+    // Alternatively, you can set an environment variable called ANDROID_HOME. There is no
+    // difference between the two methods, you can use the one you prefer.
+}
+
+dependencies {
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    api 'androidx.annotation:annotation:1.1.0'
+    api "androidx.media2:media2-session:$media2_version"
+    api "androidx.media2:media2-widget:$media2_version"
+    api "androidx.media2:media2-player:$media2_version"
+
+    implementation "androidx.core:core-ktx:1.1.0"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'com.squareup:fest-android:1.0.7'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+
+    ['powermock-api-mockito',
+     'powermock-core',
+     'powermock-module-junit4',
+     'powermock-module-junit4-rule',
+     'powermock-classloading-xstream'].each {
+        testImplementation("org.powermock:${it}:1.7.4") {
+            exclude group: 'org.mockito', module: 'mockito-core'
+        }
+    }
+}
+
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    annotation('com.mopub.common.Mockable')
+}

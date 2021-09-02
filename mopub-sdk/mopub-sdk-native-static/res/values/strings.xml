@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com_mopub_nativeads_sponsored_by">Sponsored by %s</string>
+
+</resources>

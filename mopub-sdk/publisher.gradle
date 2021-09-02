@@ -1,0 +1,75 @@
+// Copyright 2018-2021 Twitter, Inc.
+// Licensed under the MoPub SDK License Agreement
+// https://www.mopub.com/legal/sdk-license-agreement/
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def siteUrl = 'https://github.com/mopub/mopub-android-sdk'
+def gitUrl = 'github.com/mopub/mopub-android-sdk.git'
+
+// Maven signing
+ext."signing.password" = System.getenv('GPG_RING_PASS')
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = project.group
+                artifactId = project.ext.projectName
+                version = project.version
+
+                pom {
+                    name = project.ext.displayName
+                    description = project.description
+                    url = 'https://developers.mopub.com/publishers/'
+                    
+                    licenses {
+                        license {
+                            name = 'MoPub SDK License Agreement'
+                            url = 'https://www.mopub.com/legal/sdk-license-agreement/'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'mopub'
+                            name = 'MoPub (a division of Twitter, Inc.)'
+                            url = 'https://www.mopub.com'
+                            email = 'support@mopub.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://' + gitUrl
+                        developerConnection = 'scm:git:ssh://' + gitUrl
+                        url = siteUrl
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    username = project.hasProperty("maven.user") ? project.getProperty("maven.user") : ""
+                    password = project.hasProperty("maven.pass") ? project.getProperty("maven.pass") : ""
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.release
+    }
+}

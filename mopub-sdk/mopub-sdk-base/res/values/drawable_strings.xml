@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="close_button_default_text"></string>
+    <string name="close_button_type_face">Helvetica</string>
+
+</resources>

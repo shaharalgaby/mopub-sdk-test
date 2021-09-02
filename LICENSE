@@ -1,0 +1,4 @@
+The MoPub SDK License can be found at [http://www.mopub.com/legal/sdk-license-agreement/](http://www.mopub.com/legal/sdk-license-agreement/).
+
+Please note that some of the resources in this package are licensed under The Apache 2.0 license (http://www.apache.org/licenses/LICENSE-2.0), including Disk LRU Cache, Volley, and Exoplayer.
+Please note that some of the resources in this package are licensed under The MIT license (https://opensource.org/licenses/MIT), including mockito-kotlin.
